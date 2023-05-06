@@ -6,6 +6,8 @@ import {
   REGISTER_USER_SUCCESS,
   REGISTER_USER_ERROR,
   LOGOUT_USER,
+  CREATE_JOB_ERROR,
+  CREATE_JOB_SUCCESS,
 } from "./actions";
 const AppContext = React.createContext();
 const getUser = () => {
@@ -69,8 +71,29 @@ const AppProvider = ({ children }) => {
     localStorage.removeItem("user");
     dispatch({ type: LOGOUT_USER });
   };
+  // created Job
+  const createJob = async (formData) => {
+    setLoading();
+    let { token } = JSON.parse(localStorage.getItem("user"));
+
+    try {
+      const { data } = await axios.post("/api/jobs", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log(data);
+    } catch (err) {
+      dispatch({ type: CREATE_JOB_ERROR, payload: err.response.data.msg });
+      console.log(err);
+    }
+    console.log(formData);
+  };
   return (
-    <AppContext.Provider value={{ ...state, login, register, logout }}>
+    <AppContext.Provider
+      value={{ ...state, login, register, logout, createJob }}
+    >
       {children}
     </AppContext.Provider>
   );

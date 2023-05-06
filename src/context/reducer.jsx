@@ -3,6 +3,8 @@ import {
   REGISTER_USER_SUCCESS,
   REGISTER_USER_ERROR,
   LOGOUT_USER,
+  CREATE_JOB_ERROR,
+  CREATE_JOB_SUCCESS,
 } from "./actions";
 const reducer = (state, action) => {
   if (action.type === SET_LOADING) {
@@ -27,6 +29,15 @@ const reducer = (state, action) => {
   }
   if (action.type === LOGOUT_USER) {
     return { ...state, user: null, isLoading: false };
+  }
+  if (action.type === CREATE_JOB_ERROR) {
+    console.log("create job eror");
+    return {
+      ...state,
+      msgError: action.payload,
+      showAlert: true,
+      isLoading: false,
+    };
   }
   return state;
 };
