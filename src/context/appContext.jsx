@@ -8,15 +8,15 @@ import {
   LOGOUT_USER,
 } from "./actions";
 const AppContext = React.createContext();
-// const getUser = () => {
-//   if (localStorage.getItem("user")) {
-//     const user = JSON.parse(localStorage.getItem("user"));
-//     return user.name;
-//   }
-//   return null;
-// };
+const getUser = () => {
+  if (localStorage.getItem("user")) {
+    const user = JSON.parse(localStorage.getItem("user"));
+    return user.name;
+  }
+  return null;
+};
 const initialState = {
-  user: null,
+  user: getUser(),
   isLoading: false,
   jobs: [],
   showAlert: false,
@@ -48,7 +48,22 @@ const AppProvider = ({ children }) => {
     console.log(auth);
   };
   const register = async (auth) => {
+    setLoading();
     console.log(auth);
+    try {
+      const { data } = await axios.post("/api/auth/register", auth);
+      console.log(data);
+      dispatch({ type: REGISTER_USER_SUCCESS, payload: data.user });
+
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ name: data.user, token: data.token })
+      );
+    } catch (err) {
+      console.log(err);
+      dispatch({ type: REGISTER_USER_ERROR, payload: err.response.data.msg });
+      console.log(err.response.data.msg);
+    }
   };
   const logout = () => {
     localStorage.removeItem("user");

@@ -3,30 +3,36 @@ import styled from "styled-components";
 import { Logo } from "../components";
 import img from "../assets/goal.svg";
 import { Link } from "react-router-dom";
+import { useGlobalContext } from "../context/appContext";
 const Home = () => {
+  const { user } = useGlobalContext();
+
   return (
-    <Wrapper className="section-center">
-      <Logo />
-      <div className="content">
-        <div className="content__desc">
-          <h1 className="content__header">Goal Tracking App</h1>
-          <p className="content__par">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur
-            labore odio officia dolorem sapiente perferendis cumque repellat
-            dignissimos neque illum. Officiis quasi aperiam modi sapiente
-            possimus facere cupiditate perspiciatis labore!
-          </p>
-          <button className="btn auth__btn">
-            <Link className="link" to="register">
-              login/register
-            </Link>
-          </button>
+    <>
+      {user && <Navigate to="/dashboard" />}
+      <Wrapper className="section-center">
+        <Logo />
+        <div className="content">
+          <div className="content__desc">
+            <h1 className="content__header">Goal Tracking App</h1>
+            <p className="content__par">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur
+              labore odio officia dolorem sapiente perferendis cumque repellat
+              dignissimos neque illum. Officiis quasi aperiam modi sapiente
+              possimus facere cupiditate perspiciatis labore!
+            </p>
+            <button className="btn auth__btn">
+              <Link className="link" to="register">
+                login/register
+              </Link>
+            </button>
+          </div>
+          <div className="content__img">
+            <img src={img} alt="" />
+          </div>
         </div>
-        <div className="content__img">
-          <img src={img} alt="" />
-        </div>
-      </div>
-    </Wrapper>
+      </Wrapper>
+    </>
   );
 };
 const Wrapper = styled.main`
