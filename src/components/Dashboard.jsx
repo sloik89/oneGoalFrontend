@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Logo } from "../components";
 import { useGlobalContext } from "../context/appContext";
-import { FormRow } from "./";
+import { FormRow, JobList } from "./";
 import styled from "styled-components";
 const Dashboard = () => {
   const { user, logout, createJob, msgError, showAlert, isLoading } =
@@ -27,7 +27,7 @@ const Dashboard = () => {
           </button>
         </div>
       </nav>
-      <form className="jobs-list" onSubmit={submitForm}>
+      <form className="form-create" onSubmit={submitForm}>
         {showAlert && <p>{msgError}</p>}
         <h1>new job</h1>
         <FormRow
@@ -46,6 +46,7 @@ const Dashboard = () => {
           {isLoading ? "Loading" : "submit"}
         </button>
       </form>
+      <JobList />
     </Wrapper>
   );
 };
@@ -60,7 +61,7 @@ const Wrapper = styled.div`
     align-items: center;
     gap: 2rem;
   }
-  .jobs-list {
+  .form-create {
     .btn {
       align-self: center;
     }

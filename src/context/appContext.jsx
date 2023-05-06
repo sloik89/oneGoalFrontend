@@ -1,6 +1,13 @@
-import React, { useState, useEffect, useReducer, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useReducer,
+  useContext,
+  useCallback,
+} from "react";
 import reducer from "./reducer";
 import axios from "axios";
+import { getToken } from "../utils/getToken";
 import {
   SET_LOADING,
   REGISTER_USER_SUCCESS,
@@ -8,6 +15,7 @@ import {
   LOGOUT_USER,
   CREATE_JOB_ERROR,
   CREATE_JOB_SUCCESS,
+  FETCH_JOBS,
 } from "./actions";
 const AppContext = React.createContext();
 const getUser = () => {
@@ -51,7 +59,7 @@ const AppProvider = ({ children }) => {
   };
   const register = async (auth) => {
     setLoading();
-    console.log(auth);
+
     try {
       const { data } = await axios.post("/api/auth/register", auth);
       console.log(data);
@@ -82,7 +90,8 @@ const AppProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-
+      dispatch({ type: CREATE_JOB_SUCCESS });
+      fetchJobs();
       console.log(data);
     } catch (err) {
       dispatch({ type: CREATE_JOB_ERROR, payload: err.response.data.msg });
@@ -90,9 +99,26 @@ const AppProvider = ({ children }) => {
     }
     console.log(formData);
   };
+  const fetchJobs = useCallback(async () => {
+    setLoading();
+    const token = getToken();
+    console.log(token);
+    console.log("fetch jobs");
+    try {
+      const { data } = await axios.get("/api/jobs", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      dispatch({ type: FETCH_JOBS, payload: data });
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
   return (
     <AppContext.Provider
-      value={{ ...state, login, register, logout, createJob }}
+      value={{ ...state, login, register, logout, createJob, fetchJobs }}
     >
       {children}
     </AppContext.Provider>

@@ -65,7 +65,7 @@ img {
 .btn:hover {
   background-color: var(--clr-hover);
 }
-.jobs-list {
+.form-create {
   background-color: #fff;
   padding: 2rem;
   border-radius: 1rem;
