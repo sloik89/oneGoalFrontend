@@ -16,6 +16,8 @@ import {
   CREATE_JOB_ERROR,
   CREATE_JOB_SUCCESS,
   FETCH_JOBS,
+  FETCH_SINGLE_JOB_SUCCESS,
+  FETCH_SINGLE_JOB_ERROR,
 } from "./actions";
 const AppContext = React.createContext();
 const getUser = () => {
@@ -116,9 +118,64 @@ const AppProvider = ({ children }) => {
       console.log(err);
     }
   }, []);
+  const fetchSingleJob = async (id) => {
+    try {
+      const { data } = await axios.get(`/api/jobs/${id}`, {
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+      });
+      console.log(data);
+      dispatch({ type: FETCH_SINGLE_JOB_SUCCESS, payload: data });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const deleteSingleTask = async (id) => {
+    console.log(id);
+    try {
+      const { data } = await axios.delete(`/api/jobs/${id}`, {
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+      });
+      fetchJobs();
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const editJob = async (id, userInput) => {
+    console.log(userInput);
+    setLoading();
+    try {
+      const { data } = await axios.patch(
+        `/api/jobs/${id}`,
+        { ...userInput },
+        {
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
+        }
+      );
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <AppContext.Provider
-      value={{ ...state, login, register, logout, createJob, fetchJobs }}
+      value={{
+        ...state,
+        login,
+        register,
+        logout,
+        createJob,
+        fetchJobs,
+        deleteSingleTask,
+        fetchSingleJob,
+        editJob,
+      }}
     >
       {children}
     </AppContext.Provider>

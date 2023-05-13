@@ -6,6 +6,7 @@ import {
   CREATE_JOB_ERROR,
   CREATE_JOB_SUCCESS,
   FETCH_JOBS,
+  FETCH_SINGLE_JOB_SUCCESS,
 } from "./actions";
 const reducer = (state, action) => {
   if (action.type === SET_LOADING) {
@@ -45,6 +46,16 @@ const reducer = (state, action) => {
   }
   if (action.type === FETCH_JOBS) {
     return { ...state, isLoading: false, jobs: action.payload };
+  }
+  if (action.type === FETCH_SINGLE_JOB_SUCCESS) {
+    const { _id, company, position, status } = action.payload;
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: false,
+      msgError: false,
+      editItem: { company, position, status },
+    };
   }
   return state;
 };

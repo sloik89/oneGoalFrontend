@@ -4,6 +4,7 @@ import { Logo } from "../components";
 import img from "../assets/goal.svg";
 import { Link } from "react-router-dom";
 import { useGlobalContext } from "../context/appContext";
+import { Navigate } from "react-router-dom";
 const Home = () => {
   const { user } = useGlobalContext();
 

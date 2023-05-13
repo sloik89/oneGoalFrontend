@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Dashboard } from "./components";
-import { Home, Register, PrivateRoute } from "./page";
+import { Home, Register, PrivateRoute, Edit } from "./page";
 function App() {
   return (
     <Router>
@@ -16,6 +16,7 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route path="/job/:id" element={<Edit />} />
       </Routes>
     </Router>
   );

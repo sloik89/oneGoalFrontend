@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Logo } from "../components";
+import { Logo, Navbar } from "../components";
 import { useGlobalContext } from "../context/appContext";
 import { FormRow, JobList } from "./";
 import styled from "styled-components";
+import { Oval } from "react-loader-spinner";
 const Dashboard = () => {
   const { user, logout, createJob, msgError, showAlert, isLoading } =
     useGlobalContext();
@@ -18,16 +19,8 @@ const Dashboard = () => {
   };
   return (
     <Wrapper className="section-center">
-      <nav>
-        <Logo />
-        <div className="container">
-          <h3>hello {user}</h3>
-          <button onClick={logout} className="btn">
-            logout
-          </button>
-        </div>
-      </nav>
-      <form className="form-create" onSubmit={submitForm}>
+      <Navbar />
+      <form className="form-create-edit" onSubmit={submitForm}>
         {showAlert && <p>{msgError}</p>}
         <h1>new job</h1>
         <FormRow
@@ -42,25 +35,20 @@ const Dashboard = () => {
           name={"position"}
           handleChange={handleChange}
         />
-        <button type="submit" className="btn">
+        <button
+          type="submit"
+          className="btn"
+          disabled={isLoading ? true : false}
+        >
           {isLoading ? "Loading" : "submit"}
         </button>
       </form>
+
       <JobList />
     </Wrapper>
   );
 };
 const Wrapper = styled.div`
-  nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .container {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-  }
   .form-create {
     .btn {
       align-self: center;

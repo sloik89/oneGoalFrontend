@@ -1,11 +1,16 @@
 import React, { useEffect } from "react";
 import { useGlobalContext } from "../context/appContext";
 import styled from "styled-components";
+import { Oval } from "react-loader-spinner";
+import { Link } from "react-router-dom";
 const JobList = () => {
-  const { fetchJobs, jobs, isLoading } = useGlobalContext();
+  const { fetchJobs, jobs, isLoading, deleteSingleTask } = useGlobalContext();
   useEffect(() => {
     fetchJobs();
   }, []);
+  if (isLoading) {
+    return <Oval wrapperClass="loading-wrapper" />;
+  }
   return (
     <>
       {jobs.length === 0 ? (
@@ -22,8 +27,10 @@ const JobList = () => {
                 <p className="job__company">{company}</p>
                 <div className="job__footer">
                   <div className="btn__wrapper">
-                    <button>edit</button>
-                    <button>delete</button>
+                    <button>
+                      <Link to={`/job/${id}`}>edit</Link>
+                    </button>
+                    <button onClick={() => deleteSingleTask(id)}>delete</button>
                   </div>
                   <p className="job__status">{status}</p>
                 </div>
@@ -43,13 +50,17 @@ const Wrapper = styled.div`
   .job {
     padding: 1rem;
     width: 300px;
+    min-height: 200px;
     background-color: white;
     border-radius: 0.5rem;
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
   .job__date {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     position: absolute;
     right: 0;
     top: 0;
@@ -64,6 +75,30 @@ const Wrapper = styled.div`
     text-transform: capitalize;
     font-size: 1.5rem;
     margin-bottom: 1rem;
+  }
+  .job__footer {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  .btn__wrapper {
+    display: flex;
+    gap: 1rem;
+    button {
+      font-size: 1.1rem;
+      border: none;
+      text-decoration: none;
+      background-color: transparent;
+      color: red;
+      cursor: pointer;
+      letter-spacing: 2px;
+    }
+  }
+  .job__company {
+    background-color: #dfdfcc;
+    display: inline-block;
+    padding: 0.3rem 0.5rem;
+    align-self: flex-start;
   }
 `;
 export default JobList;
