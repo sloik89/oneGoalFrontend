@@ -47,7 +47,7 @@ const Edit = () => {
   console.log(user);
   return (
     <>
-      {/* {!user || <Navigate to="/" />} */}
+      {!user || <Navigate to="/" />}
       <Wrapper>
         <Navbar />
         <div className="form__edit section-center">
