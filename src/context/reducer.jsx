@@ -7,6 +7,8 @@ import {
   CREATE_JOB_SUCCESS,
   FETCH_JOBS,
   FETCH_SINGLE_JOB_SUCCESS,
+  EDIT_SINGLE_ITEM,
+  CLEAR_MSG,
 } from "./actions";
 const reducer = (state, action) => {
   if (action.type === SET_LOADING) {
@@ -41,7 +43,6 @@ const reducer = (state, action) => {
     };
   }
   if (action.type === CREATE_JOB_SUCCESS) {
-    console.log("create job");
     return { ...state, isLoading: false };
   }
   if (action.type === FETCH_JOBS) {
@@ -49,6 +50,7 @@ const reducer = (state, action) => {
   }
   if (action.type === FETCH_SINGLE_JOB_SUCCESS) {
     const { _id, company, position, status } = action.payload;
+
     return {
       ...state,
       isLoading: false,
@@ -56,6 +58,13 @@ const reducer = (state, action) => {
       msgError: false,
       editItem: { company, position, status },
     };
+  }
+  if (action.type === EDIT_SINGLE_ITEM) {
+    console.log(action.payload);
+    return { ...state, msg: action.payload, isLoading: false };
+  }
+  if (action.type === CLEAR_MSG) {
+    return { ...state, msg: "" };
   }
   return state;
 };

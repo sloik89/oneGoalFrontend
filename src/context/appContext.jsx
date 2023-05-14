@@ -18,6 +18,8 @@ import {
   FETCH_JOBS,
   FETCH_SINGLE_JOB_SUCCESS,
   FETCH_SINGLE_JOB_ERROR,
+  EDIT_SINGLE_ITEM,
+  CLEAR_MSG,
 } from "./actions";
 const AppContext = React.createContext();
 const getUser = () => {
@@ -35,7 +37,7 @@ const initialState = {
   editItem: null,
   singleJobError: false,
   editComplete: false,
-  msgError: "",
+  msg: "",
 };
 
 const AppProvider = ({ children }) => {
@@ -104,8 +106,7 @@ const AppProvider = ({ children }) => {
   const fetchJobs = useCallback(async () => {
     setLoading();
     const token = getToken();
-    console.log(token);
-    console.log("fetch jobs");
+
     try {
       const { data } = await axios.get("/api/jobs", {
         headers: {
@@ -113,7 +114,6 @@ const AppProvider = ({ children }) => {
         },
       });
       dispatch({ type: FETCH_JOBS, payload: data });
-      console.log(data);
     } catch (err) {
       console.log(err);
     }
@@ -125,7 +125,7 @@ const AppProvider = ({ children }) => {
           Authorization: `Bearer ${getToken()}`,
         },
       });
-      console.log(data);
+
       dispatch({ type: FETCH_SINGLE_JOB_SUCCESS, payload: data });
     } catch (err) {
       console.log(err);
@@ -145,6 +145,11 @@ const AppProvider = ({ children }) => {
       console.log(err);
     }
   };
+  const clearMSG = () => {
+    setTimeout(() => {
+      dispatch({ type: CLEAR_MSG });
+    }, 2000);
+  };
   const editJob = async (id, userInput) => {
     console.log(userInput);
     setLoading();
@@ -158,6 +163,7 @@ const AppProvider = ({ children }) => {
           },
         }
       );
+      dispatch({ type: EDIT_SINGLE_ITEM, payload: "item updated" });
       console.log(data);
     } catch (err) {
       console.log(err);
@@ -175,6 +181,7 @@ const AppProvider = ({ children }) => {
         deleteSingleTask,
         fetchSingleJob,
         editJob,
+        clearMSG,
       }}
     >
       {children}
